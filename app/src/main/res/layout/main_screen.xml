@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:src="@drawable/recycling_without"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -22,40 +24,13 @@
         android:gravity="center"
         android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/tvUserInfo"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Информация о пользователе"
-        android:gravity="center"
-        android:layout_marginBottom="32dp" />
-
-    <Button
-        android:id="@+id/btnRecyclingPoints"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Пункты приема"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/btnWasteCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Категории отходов"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/btnHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="История сдачи"
-        android:layout_marginBottom="32dp" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Выйти"
-        android:backgroundTint="@color/red" />
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        app:menu="@menu/menu_bottom_navigation"
+        tools:ignore="ObsoleteLayoutParam" />
 
 </LinearLayout>
