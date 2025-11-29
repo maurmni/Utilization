@@ -17,27 +17,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        AuthRepository repo = new AuthRepository(this);
-
-        if (repo.isUserLoggedIn()) {
-            openHomeFragment();
-        } else {
-            openAuthFragment();
-        }
-    }
-
-    private void openAuthFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, new AuthFragment())
-                .commit();
-    }
-
-    public void openHomeFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, new home())
-                .commit();
     }
 }
