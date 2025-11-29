@@ -70,6 +70,7 @@ public class AuthViewModel extends ViewModel {
         return authRepository.resetPassword(email, newPassword);
     }
 
+
     public boolean isUserLoggedIn() {
         return authRepository.isUserLoggedIn();
     }
