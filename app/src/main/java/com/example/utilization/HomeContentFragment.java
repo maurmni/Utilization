@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class HomeContentFregment extends Fragment {
+public class HomeContentFragment extends Fragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater,

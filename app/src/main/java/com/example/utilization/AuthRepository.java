@@ -12,42 +12,35 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AuthRepository {
-    private static final String PREF_NAME = "auth_prefs";
-    private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_USER_EMAIL = "user_email";
-    private static final String KEY_USER_NAME = "user_name";
-    private SharedPreferences sharedPreferences;
-    private ExecutorService executorService;
+
+    private final UserDAO userDao;
+    private final ExecutorService executor =
+            Executors.newSingleThreadExecutor();
+
+    private final SharedPreferences prefs;
 
     public AuthRepository(Context context) {
-        this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        this.executorService = Executors.newSingleThreadExecutor();
+        userDao = AppDataBase.get(context).userDao();
+        prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE);
     }
 
     //логин
     public LiveData<AuthResult> login(String email, String password) {
         MutableLiveData<AuthResult> result = new MutableLiveData<>();
 
-        executorService.execute(() -> {
-            try {
-                Thread.sleep(1000);
+        executor.execute(() -> {
+            UserEntity user = userDao.login(email, password);
 
-                if (isValidCredentials(email, password)) {
-                    User user = new User(
-                            UUID.randomUUID().toString(),
-                            "User Name",
-                            email,
-                            new Date(),
-                            0
-                    );
+            if (user == null) {
+                result.postValue(
+                        new AuthResult("Неверный логин или пароль")
+                );
+            } else {
+                prefs.edit()
+                        .putInt("USER_ID", user.id)
+                        .apply();
 
-                    saveUserData(user);
-                    result.postValue(new AuthResult(user));
-                } else {
-                    result.postValue(new AuthResult("Неверный email или пароль"));
-                }
-            } catch (Exception e) {
-                result.postValue(new AuthResult("Ошибка подключения"));
+                result.postValue(new AuthResult(null));
             }
         });
 
@@ -55,54 +48,38 @@ public class AuthRepository {
     }
 
     //регистрация
-    public LiveData<AuthResult> register(String name, String email, String password) {
+    public LiveData<AuthResult> register(
+            String name,
+            String email,
+            String password
+    ) {
         MutableLiveData<AuthResult> result = new MutableLiveData<>();
 
-        executorService.execute(() -> {
-            try {
-                Thread.sleep(1000);
-
-                if (isEmailTaken(email)) {
-                    result.postValue(new AuthResult("Email уже зарегистрирован"));
-                    return;
-                }
-
-                if (!isValidPassword(password)) {
-                    result.postValue(new AuthResult("Пароль должен содержать минимум 6 символов"));
-                    return;
-                }
-
-                User user = new User(
-                        UUID.randomUUID().toString(),
-                        name,
-                        email,
-                        new Date(),
-                        0
+        executor.execute(() -> {
+            if (userDao.findByEmail(email) != null) {
+                result.postValue(
+                        new AuthResult("Email уже существует")
                 );
-
-                saveUserData(user);
-                result.postValue(new AuthResult(user));
-
-            } catch (Exception e) {
-                result.postValue(new AuthResult("Ошибка регистрации"));
+                return;
             }
-        });
 
-        return result;
-    }
+            UserEntity user = new UserEntity(
+                    name,
+                    email,
+                    password,
+                    System.currentTimeMillis()
+            );
 
-    //восстановление пароля
-    public LiveData<Boolean> resetPassword(String email) {
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
+            userDao.insert(user);
 
-        executorService.execute(() -> {
-            try {
-                Thread.sleep(1000);
-                // Имитация отправки email
-                result.postValue(true);
-            } catch (Exception e) {
-                result.postValue(false);
-            }
+            UserEntity saved =
+                    userDao.findByEmail(email);
+
+            prefs.edit()
+                    .putInt("USER_ID", saved.id)
+                    .apply();
+
+            result.postValue(new AuthResult(null));
         });
 
         return result;
@@ -110,44 +87,43 @@ public class AuthRepository {
 
     //проверка авторизации
     public boolean isUserLoggedIn() {
-        return sharedPreferences.contains(KEY_USER_ID);
+        return prefs.getInt("USER_ID", -1) != -1;
     }
-    public User getCurrentUser() {
-        if (!isUserLoggedIn()) return null;
 
-        return new User(
-                sharedPreferences.getString(KEY_USER_ID, ""),
-                sharedPreferences.getString(KEY_USER_NAME, ""),
-                sharedPreferences.getString(KEY_USER_EMAIL, ""),
-                new Date(sharedPreferences.getLong("registration_date", 0)),
-                sharedPreferences.getInt("total_points", 0)
-        );
+    //текущий пользователь
+    public LiveData<UserEntity> getCurrentUser() {
+        MutableLiveData<UserEntity> user = new MutableLiveData<>();
+
+        int id = prefs.getInt("USER_ID", -1);
+        if (id == -1) {
+            user.setValue(null);
+            return user;
+        }
+
+        executor.execute(() -> {
+            user.postValue(userDao.getById(id));
+        });
+
+        return user;
     }
 
     //выход
     public void logout() {
-        sharedPreferences.edit().clear().apply();
+        prefs.edit().clear().apply();
+    }
+    public LiveData<Boolean> resetPassword(
+            String email,
+            String newPassword
+    ) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        executor.execute(() -> {
+            int updated = userDao.resetPassword(email, newPassword);
+            result.postValue(updated > 0);
+        });
+
+        return result;
     }
 
-    private void saveUserData(User user) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_USER_ID, user.getUserId());
-        editor.putString(KEY_USER_NAME, user.getUserName());
-        editor.putString(KEY_USER_EMAIL, user.getEmail());
-        editor.putLong("registration_date", user.getRegistrationDate().getTime());
-        editor.putInt("total_points", user.getTotalPoints());
-        editor.apply();
-    }
 
-    private boolean isValidCredentials(String email, String password) {
-        return !email.isEmpty() && password.length() >= 6;
-    }
-
-    private boolean isEmailTaken(String email) {
-        return false;
-    }
-
-    private boolean isValidPassword(String password) {
-        return password != null && password.length() >= 6;
-    }
 }

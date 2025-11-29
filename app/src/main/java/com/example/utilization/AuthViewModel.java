@@ -63,34 +63,26 @@ public class AuthViewModel extends ViewModel {
         });
     }
 
-    public void resetPassword(String email) {
-        if (authRepository == null) return;
-
-        if (!isValidEmail(email)) {
-            authResult.setValue(new AuthResult("Введите корректный email"));
-            return;
-        }
-
-        isLoading.setValue(true);
-        authRepository.resetPassword(email).observeForever(success -> {
-            isLoading.setValue(false);
-            passwordResetResult.setValue(success);
-        });
+    public LiveData<Boolean> resetPassword(
+            String email,
+            String newPassword
+    ) {
+        return authRepository.resetPassword(email, newPassword);
     }
+
 
     public boolean isUserLoggedIn() {
-        return authRepository != null && authRepository.isUserLoggedIn();
+        return authRepository.isUserLoggedIn();
     }
 
-    public User getCurrentUser() {
-        return authRepository != null ? authRepository.getCurrentUser() : null;
+    public LiveData<UserEntity> getCurrentUser() {
+        return authRepository.getCurrentUser();
     }
 
     public void logout() {
-        if (authRepository != null) {
-            authRepository.logout();
-        }
+        authRepository.logout();
     }
+
 
     private boolean isValidEmail(String email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
