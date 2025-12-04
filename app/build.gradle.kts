@@ -45,6 +45,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     implementation("androidx.room:room-runtime:2.8.4")
 
+    implementation ("org.osmdroid:osmdroid-android:6.1.18")
+
     annotationProcessor("androidx.room:room-compiler:2.8.4")
     implementation("androidx.room:room-common:2.8.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
