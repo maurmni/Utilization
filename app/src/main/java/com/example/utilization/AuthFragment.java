@@ -41,16 +41,6 @@ public class AuthFragment extends Fragment {
                         pass.getText().toString()
                 ));
 
-        viewModel.getAuthResult().observe(getViewLifecycleOwner(), r -> {
-            if (r.isSuccess()) {
-                NavHostFragment
-                        .findNavController(this)
-                        .navigate(R.id.action_auth_to_home);
-            } else {
-                error.setText(r.getError());
-                error.setVisibility(View.VISIBLE);
-            }
-        });
         Button btnRegister = v.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(view -> showRegisterDialog());
 
@@ -61,7 +51,6 @@ public class AuthFragment extends Fragment {
         btnResetPassword.setOnClickListener(v1 -> showResetPasswordDialog());
 
         return v;
-
     }
     private void showRegisterDialog() {
         View dialogView = LayoutInflater.from(requireContext())

@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/authFragment">
+    app:startDestination="@id/homeContentFragment">
 
     <fragment
-        android:id="@+id/authFragment"
-        android:name="com.example.utilization.AuthFragment"
-        android:label="Auth">
-
-        <action
-            android:id="@+id/action_auth_to_home"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        android:id="@+id/homeContentFragment"
+        android:name="com.example.utilization.HomeContentFragment"
+        android:label="Главный экран" />
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.utilization.home"
-        android:label="Home" />
+        android:id="@+id/profileFragment"
+        android:name="com.example.utilization.ProfileFragment"
+        android:label="Профиль" />
 
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.utilization.MapFragment"
+        android:label="Карта" />
+
+    <fragment
+        android:id="@+id/typesFragment"
+        android:name="com.example.utilization.TypesFragment"
+        android:label="Типы" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.utilization.HistoryFragment"
+        android:label="История" />
 </navigation>

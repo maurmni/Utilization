@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/userNavi"
+        android:id="@+id/homeContentFragment"
+        android:icon="@drawable/home"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/profileFragment"
         android:icon="@drawable/user"
-        android:title="User"
-        />
+        android:title="User"/>
+
     <item
-        android:id="@+id/garbagePoint"
+        android:id="@+id/mapFragment"
         android:icon="@drawable/gar"
-        android:title="Home"
-        />
+        android:title="Map"/>
+
     <item
-        android:id="@+id/garbageTypes"
+        android:id="@+id/typesFragment"
         android:icon="@drawable/types"
-        android:title="Chat"
-        />
+        android:title="Types"/>
+
     <item
-        android:id="@+id/utilHistory"
+        android:id="@+id/historyFragment"
         android:icon="@drawable/util"
-        android:title="Settings"
-        />
+        android:title="History"/>
 </menu>

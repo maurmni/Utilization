@@ -9,20 +9,18 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 public class HomeContentFragment extends Fragment {
+
     @Override
     public View onCreateView(
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        TextView tv = new TextView(requireContext());
-        tv.setText("Главный экран");
-        tv.setTextSize(22);
-        tv.setGravity(android.view.Gravity.CENTER);
-        tv.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-        return tv;
+        return inflater.inflate(
+                R.layout.fragment_home_content,
+                container,
+                false
+        );
     }
 }
+
