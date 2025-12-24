@@ -3,21 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7efda"
-    android:orientation="vertical"
-    android:paddingBottom="72dp">
+    android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/historyRecyclerView"
+        android:id="@+id/rvGiven"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/btnAddWaste"
+    <TextView
+        android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:backgroundTint="#6f5e4f"
-        android:text="Добавить сдачу" />
+        android:gravity="center"
+        android:text="Сдач пока нет"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
 </LinearLayout>

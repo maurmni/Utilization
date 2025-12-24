@@ -2,58 +2,69 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7efda"
     android:padding="24dp">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <TextView
-            android:text="Профиль"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:text="Профиль"
             android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etName"
-            android:hint="Имя"
             android:layout_width="match_parent"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+            android:hint="Имя" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmail"
-            android:hint="Email"
             android:layout_width="match_parent"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+            android:hint="Email" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
-            android:hint="Пароль"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+            android:hint="Пароль"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#549D5D"
+            android:backgroundTint="#6f5e4f"
             android:text="Изменить" />
+
         <Button
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#549D5D"
+            android:backgroundTint="#6f5e4f"
             android:text="Сохранить" />
 
         <TextView
             android:id="@+id/tvRegistrationDate"
-            android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#990000"
+            android:text="Выйти из аккаунта"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>

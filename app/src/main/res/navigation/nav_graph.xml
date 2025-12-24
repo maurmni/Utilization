@@ -27,5 +27,26 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.utilization.HistoryFragment"
-        android:label="История" />
+        android:label="История">
+        <action
+            android:id="@+id/action_historyFragment_to_addWasteFragment"
+            app:destination="@id/addWasteFragment" />
+        <action
+            android:id="@+id/action_historyFragment_to_givenFragment"
+            app:destination="@id/givenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/givenFragment"
+        android:name="com.example.utilization.GivenFragment">
+        <argument
+            android:name="historyId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.utilization.AuthFragment"
+        android:label="Auth" />
+    <fragment
+        android:id="@+id/addWasteFragment"
+        android:name="com.example.utilization.AddWasteFragment"/>
 </navigation>

@@ -2,25 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="#f7efda"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="24dp">
 
     <TextView
-        android:text="Совет дня"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_marginTop="16dp"
-        android:textSize="20sp"/>
+        android:text="Совет дня"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvEcoTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Загрузка..."
-        android:textSize="18sp"/>
-
+        android:textSize="18sp" />
 
 
 </LinearLayout>

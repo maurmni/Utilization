@@ -1,5 +1,6 @@
 package com.example.utilization;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,9 +64,11 @@ public class ProfileFragment extends Fragment {
                 showEditDialog(user);
             }
         });
+
+        Button btnLogout = v.findViewById(R.id.btnLogout);
+
+        btnLogout.setOnClickListener(view -> logout());
         return v;
-
-
     }
     private void showEditDialog(UserEntity user) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile, null);
@@ -95,4 +98,23 @@ public class ProfileFragment extends Fragment {
                 .setNegativeButton("Отмена", null)
                 .show();
     }
+    private void logout() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Выход из аккаунта")
+                .setMessage("Вы уверены, что хотите выйти?")
+                .setPositiveButton("Да", (dialog, which) -> {
+                    android.content.SharedPreferences prefs = requireActivity()
+                            .getSharedPreferences("auth", android.content.Context.MODE_PRIVATE);
+                    prefs.edit()
+                            .clear()
+                            .apply();
+                    android.content.Intent intent = new android.content.Intent(requireContext(), MainActivity.class);
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    requireActivity().finish();
+                })
+                .setNegativeButton("Нет", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
 }

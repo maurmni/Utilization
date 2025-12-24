@@ -32,26 +32,44 @@ public class AuthFragment extends Fragment {
         Button btnLogin = v.findViewById(R.id.btnLogin);
         TextView error = v.findViewById(R.id.tvError);
 
-        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        viewModel.setAuthRepository(new AuthRepository(requireContext()));
+        viewModel = new ViewModelProvider(this)
+                .get(AuthViewModel.class);
 
-        btnLogin.setOnClickListener(view ->
-                viewModel.login(
-                        email.getText().toString(),
-                        pass.getText().toString()
-                ));
+        btnLogin.setOnClickListener(view -> {
+            error.setVisibility(View.GONE);
 
-        Button btnRegister = v.findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(view -> showRegisterDialog());
+            String emailStr = email.getText().toString().trim();
+            String passStr = pass.getText().toString().trim();
 
-        Button btnReset = v.findViewById(R.id.btnResetPassword);
-        btnReset.setOnClickListener(view -> showResetPasswordDialog());
+            if (emailStr.isEmpty() || passStr.isEmpty()) {
+                Toast.makeText(requireContext(),
+                        "Введите email и пароль", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        Button btnResetPassword = v.findViewById(R.id.btnResetPassword);
-        btnResetPassword.setOnClickListener(v1 -> showResetPasswordDialog());
+            viewModel.login(emailStr, passStr)
+                    .observe(getViewLifecycleOwner(), result -> {
+                        if (result == null) return;
+
+                        if (result.isSuccess()) {
+                            NavHostFragment.findNavController(this)
+                                    .navigate(R.id.homeContentFragment);
+                        } else {
+                            error.setText(result.getError());
+                            error.setVisibility(View.VISIBLE);
+                        }
+                    });
+        });
+
+        v.findViewById(R.id.btnRegister)
+                .setOnClickListener(view -> showRegisterDialog());
+
+        v.findViewById(R.id.btnResetPassword)
+                .setOnClickListener(view -> showResetPasswordDialog());
 
         return v;
     }
+
     private void showRegisterDialog() {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_register, null);
@@ -61,46 +79,64 @@ public class AuthFragment extends Fragment {
         TextInputEditText etPassword = dialogView.findViewById(R.id.etPassword);
         TextInputEditText etConfirm = dialogView.findViewById(R.id.etConfirmPassword);
 
-        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Регистрация")
                 .setView(dialogView)
                 .setPositiveButton("Зарегистрироваться", (d, w) -> {
-                    viewModel.register(
-                            etName.getText().toString(),
-                            etEmail.getText().toString(),
-                            etPassword.getText().toString(),
-                            etConfirm.getText().toString()
-                    );
+
+                    String name = etName.getText().toString().trim();
+                    String email = etEmail.getText().toString().trim();
+                    String password = etPassword.getText().toString();
+                    String confirm = etConfirm.getText().toString();
+
+                    if (name.isEmpty() || email.isEmpty()
+                            || password.isEmpty() || confirm.isEmpty()) {
+                        Toast.makeText(requireContext(),
+                                "Заполните все поля", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!password.equals(confirm)) {
+                        Toast.makeText(requireContext(),
+                                "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    viewModel.register(name, email, password)
+                            .observe(getViewLifecycleOwner(), result -> {
+                                if (result == null) return;
+
+                                if (result.isSuccess()) {
+                                    Toast.makeText(requireContext(),
+                                            "Регистрация успешна", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(requireContext(),
+                                            result.getError(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 })
                 .setNegativeButton("Отмена", null)
                 .show();
     }
+
     private void showResetPasswordDialog() {
-        LayoutInflater inflater = LayoutInflater.from(requireContext());
-        View dialogView = inflater.inflate(R.layout.dialog_file_reset, null);
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_file_reset, null);
 
         TextInputEditText etEmail = dialogView.findViewById(R.id.etEmail);
-        TextInputEditText etPasswordReset = dialogView.findViewById(R.id.etPasswordReset);
+        TextInputEditText etPassword = dialogView.findViewById(R.id.etPasswordReset);
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Сброс пароля")
                 .setView(dialogView)
-                .setPositiveButton("Сменить пароль", (dialog, which) -> {
+                .setPositiveButton("Сменить пароль", (d, w) -> {
+
                     String email = etEmail.getText().toString().trim();
-                    String newPassword = etPasswordReset.getText().toString();
+                    String newPassword = etPassword.getText().toString();
 
                     if (email.isEmpty() || newPassword.isEmpty()) {
-                        Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        Toast.makeText(requireContext(), "Введите корректный email", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (newPassword.length() < 6) {
-                        Toast.makeText(requireContext(), "Пароль должен содержать минимум 6 символов", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                "Заполните все поля", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -108,7 +144,7 @@ public class AuthFragment extends Fragment {
                             .observe(getViewLifecycleOwner(), success -> {
                                 if (success != null && success) {
                                     Toast.makeText(requireContext(),
-                                            "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
+                                            "Пароль изменён", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(requireContext(),
                                             "Ошибка изменения пароля", Toast.LENGTH_SHORT).show();
@@ -118,5 +154,4 @@ public class AuthFragment extends Fragment {
                 .setNegativeButton("Отмена", null)
                 .show();
     }
-
 }

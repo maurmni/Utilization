@@ -9,7 +9,7 @@ public class RetrofitEco {
     public static EcoApi getApi() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://opensheet.elk.sh/1v8q94__FB-BW4yRJ70mNvlmPXGjDx9hSg2cilO-C5hI/")
+                    .baseUrl("https://opensheet.elk.sh/1v8q94__FB-BW4yRJ70mNvlmPXGjDx9hSg2cilO-C5hI/%D0%9B%D0%B8%D1%81%D1%821/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
