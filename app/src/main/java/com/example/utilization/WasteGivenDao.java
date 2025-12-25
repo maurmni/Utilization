@@ -42,4 +42,7 @@ public interface WasteGivenDao {
     LiveData<List<WasteGiven>> getByHistoryAndUser( int historyId, int userId );
     @Query("SELECT * FROM wasteGiven WHERE historyId = :historyId")
     LiveData<List<WasteGiven>> getByHistory(int historyId);
+
+    @Query("SELECT COUNT(*) FROM wasteGiven")
+    int countWasteGivens();
 }

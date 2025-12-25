@@ -9,7 +9,7 @@ import java.util.List;
 public interface WasteCategoryDao {
 
     @Insert
-    void insert(WasteCategory category);
+    long insert(WasteCategory category);
     @Query("SELECT COUNT(*) FROM wasteCategories")
     int count();
 

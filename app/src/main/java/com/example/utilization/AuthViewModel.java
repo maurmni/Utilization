@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.AndroidViewModel;
+
+//ViewModel для авторизации (связывает фрагменты и репозитории)
 public class AuthViewModel extends AndroidViewModel {
 
     private final AuthRepository authRepository;

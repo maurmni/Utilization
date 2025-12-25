@@ -9,7 +9,7 @@ import java.util.List;
 public interface RecyclingPointDao {
 
     @Insert
-    void insert(RecyclingPoint item);
+    long insert(RecyclingPoint item);
 
     @Query("SELECT COUNT(*) FROM recyclingPoints")
     int count();

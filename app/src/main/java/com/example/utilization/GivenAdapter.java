@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//отображение списка сданных отходов
 public class GivenAdapter
         extends RecyclerView.Adapter<GivenAdapter.GivenVH> {
 
@@ -24,6 +24,7 @@ public class GivenAdapter
         this.listener = listener;
     }
 
+    //обновление данных адаптера
     public void submit(List<WasteGiven> items) {
         list.clear();
         list.addAll(items);

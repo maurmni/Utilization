@@ -11,25 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+//адаптер для отображения истории сдачи
 public class HistoryAdapter
         extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
+    //интерфейс для обработки клика по элементу
     public interface OnItemClickListener {
         void onClick(RecyclingHistory history);
     }
 
+    //список элементов истории
     private List<RecyclingHistory> list;
     private OnItemClickListener listener;
 
+    //обработчик нажатий
     public HistoryAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    //обновление списка данных
     public void submitList(List<RecyclingHistory> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
+    //создание ViewHolder для 1 (одного(one)) элемента списка
     @NonNull
     @Override
     public HistoryViewHolder onCreateViewHolder(
@@ -41,18 +47,22 @@ public class HistoryAdapter
         return new HistoryViewHolder(v);
     }
 
+    //привязка данных к элкменту списка
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         RecyclingHistory history = list.get(position);
         holder.bind(history);
+        //обработка клика по выбранному элементу
         holder.itemView.setOnClickListener(v -> listener.onClick(history));
     }
 
+    //количество элеентво списка
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
     }
 
+    //ViewHolder хранящий ссылки на элементы интерфейса строки списка
     static class HistoryViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvPoint, tvDate;
@@ -63,6 +73,7 @@ public class HistoryAdapter
             tvDate = itemView.findViewById(R.id.tvDate);
         }
 
+        //заполнение элементов интерфейса данными
         void bind(RecyclingHistory h) {
             tvPoint.setText("Пункт: " + h.recyclingPoint);
             tvDate.setText(h.date);

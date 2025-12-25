@@ -9,7 +9,7 @@ import androidx.room.Update;
 public interface UserDAO {
 
     @Insert
-    void insert(UserEntity user);
+    long insert(UserEntity user);
 
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     UserEntity login(String email, String password);
@@ -25,4 +25,6 @@ public interface UserDAO {
     
     @Update
     void update(UserEntity user);
+    @Query("SELECT COUNT(*) FROM users")
+    int countUsers();
 }

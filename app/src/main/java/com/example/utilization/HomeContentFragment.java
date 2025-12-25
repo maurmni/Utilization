@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//отображение советов
 public class HomeContentFragment extends Fragment {
 
     @Override
@@ -24,16 +25,21 @@ public class HomeContentFragment extends Fragment {
         EcoApi api = RetrofitEco.getApi();
 
         api.getTips().enqueue(new Callback<List<EcoTip>>() {
+           //если получилось подключиться к документу с советами
             @Override
             public void onResponse(Call<List<EcoTip>> call, Response<List<EcoTip>> response) {
+                //пришел ответ не пустой
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     int index = new Random().nextInt(response.body().size());
                     tvTip.setText(response.body().get(index).text);
-                } else {
-                    tvTip.setText("Нет советов");
+                }
+                //пусто ответ
+                else {
+                    tvTip.setText("Сдайте вторсырье в пункты приема");
                 }
             }
 
+            //подкоючиться не вышло
             @Override
             public void onFailure(Call<List<EcoTip>> call, Throwable t) {
                 tvTip.setText("Берегите природу");

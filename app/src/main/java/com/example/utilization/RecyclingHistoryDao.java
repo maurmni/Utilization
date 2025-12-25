@@ -19,4 +19,10 @@ public interface RecyclingHistoryDao {
     void deleteById(int id);
     @Query("SELECT COUNT(*) FROM RecyclingHistory WHERE id = :historyId")
     int exists(int historyId);
+
+    @Query("SELECT * FROM RecyclingHistory WHERE id = :id LIMIT 1")
+    RecyclingHistory getByIdSync(int id);
+
+    @Query("SELECT COUNT(*) FROM RecyclingHistory")
+    int countHistories();
 }

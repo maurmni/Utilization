@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
+//отображение списка сданных отходов для выбранной истории сдачи
 public class GivenFragment extends Fragment {
 
     private int historyId;
@@ -55,6 +56,7 @@ public class GivenFragment extends Fragment {
                 new ViewModelProvider(requireActivity())
                         .get(AuthViewModel.class);
 
+        //загрузка данных текущего пользователя
         authVM.getCurrentUser().observe(getViewLifecycleOwner(), user -> {
             if (user == null) return;
 
@@ -96,6 +98,8 @@ public class GivenFragment extends Fragment {
 
         return v;
     }
+
+    //диалога изменения записи WasteGiven
     private void showEditDialog(WasteGiven item) {
         View dialog = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_edit_waste_given, null);

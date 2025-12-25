@@ -28,6 +28,7 @@ public class MapFragment extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
 
+        //точки на карте по координатам
         GeoPoint center = new GeoPoint(51.767976,55.097234);
         map.getController().setZoom(17.0);
         map.getController().setCenter(center);
@@ -47,6 +48,7 @@ public class MapFragment extends Fragment {
         return view;
     }
 
+    //добавление точек на карту
     private void addPoint(double lat, double lon, String title) {
         Marker marker = new Marker(map);
         marker.setPosition(new GeoPoint(lat, lon));
@@ -54,12 +56,14 @@ public class MapFragment extends Fragment {
         map.getOverlays().add(marker);
     }
 
+    //при обновлении
     @Override
     public void onResume() {
         super.onResume();
         map.onResume();
     }
 
+    //при паузе
     @Override
     public void onPause() {
         super.onPause();

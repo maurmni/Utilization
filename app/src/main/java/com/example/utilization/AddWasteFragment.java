@@ -25,13 +25,16 @@ import java.util.Locale;
 
 public class AddWasteFragment extends Fragment {
 
+    //выпадающие списки категорий и пунктов приема
     private Spinner spinnerCategory;
     private Spinner spinnerPoint;
-    private EditText editWeight;
+    private EditText editWeight; //поле для ввода веса
 
+    //списки из бд
     private List<WasteCategory> categories = new ArrayList<>();
     private List<RecyclingPoint> points = new ArrayList<>();
 
+    //адаптеры для отображения названий spiner
     private ArrayAdapter<String> catAdapter;
     private ArrayAdapter<String> pointAdapter;
     private int historyId;
@@ -45,32 +48,40 @@ public class AddWasteFragment extends Fragment {
                              @Nullable Bundle savedInstanceState)
     {
 
+        //загрузка layout-файла фрагмента
         View v = inflater.inflate(R.layout.fragment_add_waste, container, false);
 
+        //инициализация элементов интерфейса
         spinnerCategory = v.findViewById(R.id.spinnerCategory);
         spinnerPoint = v.findViewById(R.id.spinnerPoint);
         editWeight = v.findViewById(R.id.editWeight);
         Button btnAdd = v.findViewById(R.id.btnAddWaste);
 
+        //получение ViewModel
         viewModel = new ViewModelProvider(this)
                 .get(WasteGivenViewModel.class);
 
+        //настройка адаптера категорий
         catAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 new ArrayList<>());
         spinnerCategory.setAdapter(catAdapter);
 
+        //настройка адаптера пунктов приема
         pointAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 new ArrayList<>());
         spinnerPoint.setAdapter(pointAdapter);
 
+        //получние экземпляра бд
         AppDataBase db = AppDataBase.get(requireContext());
 
+        //при изменеии данных в бд Spinner автоматически обновится
         db.wasteCategoryDao().getAllLive().observe(getViewLifecycleOwner(), categoriesList -> {
             categories.clear();
             categories.addAll(categoriesList);
 
+            //преобразование сущности в список названий
             List<String> names = new ArrayList<>();
             for (WasteCategory c : categories) {
                 names.add(c.wasteName);
@@ -81,6 +92,7 @@ public class AddWasteFragment extends Fragment {
             catAdapter.notifyDataSetChanged();
         });
 
+        //наблюдение за списком пунктов приема
         db.recyclingPointDao().getAllLive().observe(getViewLifecycleOwner(), pointsList -> {
             points.clear();
             points.addAll(pointsList);
@@ -95,19 +107,23 @@ public class AddWasteFragment extends Fragment {
             pointAdapter.notifyDataSetChanged();
         });
 
+        //получение historyId
         historyId = getArguments() != null
                 ? getArguments().getInt("historyId", -1)
                 : -1;
 
+        //ViewModel авторизация для получения текущего пользователя
         AuthViewModel authVM =
                 new ViewModelProvider(requireActivity())
                         .get(AuthViewModel.class);
 
+        //после получения авторизованного пользователя активируется кнопка для добавления отходов
         authVM.getCurrentUser().observe(getViewLifecycleOwner(), user -> {
             if (user == null) return;
 
             btnAdd.setOnClickListener(view -> {
 
+                //проверка ввода веса
                 String weightStr = editWeight.getText().toString().trim();
                 if (weightStr.isEmpty()) {
                     Toast.makeText(getContext(), "Введите вес", Toast.LENGTH_SHORT).show();
@@ -115,16 +131,20 @@ public class AddWasteFragment extends Fragment {
                 }
 
                 float weight = Float.parseFloat(weightStr);
+
+                //получение выбранной категории
                 int categoryIndex = spinnerCategory.getSelectedItemPosition();
                 if (categoryIndex < 0) return;
 
                 int categoryId = categories.get(categoryIndex).id;
                 int pointId = points.get(spinnerPoint.getSelectedItemPosition()).id;
 
+                //формирование текущей даты
                 String date = new SimpleDateFormat(
                         "dd.MM.yyyy", Locale.getDefault()
                 ).format(new Date());
 
+                //сохранеие данных через ViewModel
                 viewModel.insertWithHistory(
                         user.id,
                         categoryId,
@@ -133,18 +153,20 @@ public class AddWasteFragment extends Fragment {
                         date
                 );
 
+                //возврат на предыдущий экран
                 NavHostFragment.findNavController(this).navigateUp();
             });
         });
 
+        //кнопка отмены
         Button btnFinish = v.findViewById(R.id.btnFinish);
-
         btnFinish.setOnClickListener(view ->
                 NavHostFragment
                         .findNavController(this)
                         .navigateUp()
         );
 
+        //логи для отладки наполненности бд
         db.wasteCategoryDao().getAllLive()
                 .observe(getViewLifecycleOwner(), list ->
                         Log.d("DB_CHECK", "Категорий: " + list.size())

@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+//фрагментп профиля пользвателя
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel viewModel;
@@ -30,6 +31,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        //элементы интерфейса
         Button btnSave = v.findViewById(R.id.btnSaveProfile);
         Button btnEdit = v.findViewById(R.id.btnEditProfile);
         TextInputEditText etName = v.findViewById(R.id.etName);
@@ -39,6 +42,7 @@ public class ProfileFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
+        //наблюдение за данными пользователями
         viewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user == null) return;
 
@@ -51,6 +55,7 @@ public class ProfileFragment extends Fragment {
             tvDate.setText("Зарегистрирован: " + sdf.format(date));
         });
 
+        //сохранение изменений
         btnSave.setOnClickListener(view -> {
             String newName = etName.getText().toString();
             String newEmail = etEmail.getText().toString();
@@ -58,6 +63,8 @@ public class ProfileFragment extends Fragment {
 
             viewModel.updateUser(newName, newEmail, newPassword);
         });
+
+        //обновление диалога редактирования
         btnEdit.setOnClickListener(view -> {
             UserEntity user = viewModel.getUser().getValue();
             if (user != null) {
@@ -65,11 +72,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //выход из аккаунта
         Button btnLogout = v.findViewById(R.id.btnLogout);
 
         btnLogout.setOnClickListener(view -> logout());
         return v;
     }
+    //диалог редактирования профиля
     private void showEditDialog(UserEntity user) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile, null);
         TextInputEditText etEmail = dialogView.findViewById(R.id.etEmail);
@@ -98,6 +107,8 @@ public class ProfileFragment extends Fragment {
                 .setNegativeButton("Отмена", null)
                 .show();
     }
+
+    //выход из аккаунта
     private void logout() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Выход из аккаунта")

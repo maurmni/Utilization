@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+//главный фрагмент с навигацией
 public class home extends Fragment {
 
     @Override
@@ -20,11 +21,14 @@ public class home extends Fragment {
     ) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
+        //меню навигации нижнее
         BottomNavigationView bottomNav = v.findViewById(R.id.bottom_navigation);
 
+        //для навигации между фрагментами
         NavController navController =
                 NavHostFragment.findNavController(this);
 
+        //привязывание навигации к BottomNavigationView
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         return v;

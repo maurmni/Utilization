@@ -19,9 +19,10 @@ import java.util.concurrent.Executors;
                 RecyclingHistory.class,
                 RecyclingPoint.class
         },
-        version = 11,
+        version = 13,
         exportSchema = false
 )
+//инициализация бд room (при первом создании бд авоматически заполняется)
 public abstract class AppDataBase extends RoomDatabase {
 
     private static AppDataBase INSTANCE;
@@ -70,7 +71,40 @@ public abstract class AppDataBase extends RoomDatabase {
                                         new RecyclingPoint("Экопункт №1", "ул. Ленина 10", "89457628473", 1)
                                 );
                                 database.recyclingPointDao().insert(
-                                        new RecyclingPoint("Экопункт №2", "пр. Мира 25", "89305274062", 2)
+                                        new RecyclingPoint("Экопункт №2", "ул. Советская 20/5", "89305274062", 2)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №3", "ул. Кобозева 33", "89570265826", 3)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №4", "пр. Победы 1а", "89257015916", 4)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №5", "пр. Гагарина 43/2", "89861937098", 5)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №6", "пр. Гагарина 27/5/2", "89892351679", 1)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №7", "ул. Новая 25", "89096426786", 2)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №8", "ул. Калининградская 35", "89986416787", 3)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №9", "ул. Автомобилистов 23/1", "89094572856", 4)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №10", "ул. Берёзка 2/5", "8935198093", 5)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №11", "ул. Джержинского 23", "89850253851", 1)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Экопункт №12", "ул. Джержинского 2/3", "89892650275", 2)
+                                );
+                                database.recyclingPointDao().insert(
+                                        new RecyclingPoint("Разработано:", "Ахметова Дарья 4ПК2", "89325316153", 3)
                                 );
                             });
                         }
@@ -78,5 +112,8 @@ public abstract class AppDataBase extends RoomDatabase {
                     .build();
         }
         return INSTANCE;
+    }
+    public static void setTestInstance(AppDataBase testDb) {
+        INSTANCE = testDb;
     }
 }

@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+//фрагмент для отображения истории сдачи
 public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -31,11 +32,15 @@ public class HistoryFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
+
+        //загрузка разметки фрагмента
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
+        //инициализация RecyclerView
         recyclerView = v.findViewById(R.id.historyRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        //кнопка добавления новой сдачи
         Button btnAdd = v.findViewById(R.id.btnAddWaste);
         btnAdd.setOnClickListener(view ->
                 NavHostFragment
@@ -43,6 +48,7 @@ public class HistoryFragment extends Fragment {
                         .navigate(R.id.action_historyFragment_to_addWasteFragment)
         );
 
+        //создание адаптера с обработкой нажатия
         adapter = new HistoryAdapter(history -> {
             Bundle args = new Bundle();
             args.putInt("historyId", history.id);
@@ -54,15 +60,19 @@ public class HistoryFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+        //получение экземпяра бд
         AppDataBase db = AppDataBase.get(requireContext());
 
+        //получение ViewModel авторизации
         AuthViewModel authVM =
                 new ViewModelProvider(requireActivity())
                         .get(AuthViewModel.class);
 
+        //наблюдение за текущим юзером
         authVM.getCurrentUser().observe(getViewLifecycleOwner(), user -> {
             if (user == null) return;
 
+            //загрузка истории пользователя из бд
             db.recyclingHistoryDao()
                     .getAllByUser(user.id)
                     .observe(getViewLifecycleOwner(), historyList -> {

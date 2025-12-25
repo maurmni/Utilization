@@ -25,35 +25,44 @@ public class AuthFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
+        //загрузка layout-файла фрагмента
         View v = inflater.inflate(R.layout.fragment_auth, container, false);
 
+        //инициализация элементов интерфейса
         TextInputEditText email = v.findViewById(R.id.etPasswordReset);
         TextInputEditText pass = v.findViewById(R.id.etPassword);
         Button btnLogin = v.findViewById(R.id.btnLogin);
         TextView error = v.findViewById(R.id.tvError);
 
+        //получение ViewModel
         viewModel = new ViewModelProvider(this)
                 .get(AuthViewModel.class);
 
+        //обрвботчик нажатия кнопки входа
         btnLogin.setOnClickListener(view -> {
             error.setVisibility(View.GONE);
 
+            //получение введенных данных
             String emailStr = email.getText().toString().trim();
             String passStr = pass.getText().toString().trim();
 
+            //проверка заполненности полей
             if (emailStr.isEmpty() || passStr.isEmpty()) {
                 Toast.makeText(requireContext(),
                         "Введите email и пароль", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            //вызов логина через ViewModel
             viewModel.login(emailStr, passStr)
                     .observe(getViewLifecycleOwner(), result -> {
                         if (result == null) return;
 
+                        //успешная авторизация
                         if (result.isSuccess()) {
                             NavHostFragment.findNavController(this)
                                     .navigate(R.id.homeContentFragment);
+                            //ошибка авторизации
                         } else {
                             error.setText(result.getError());
                             error.setVisibility(View.VISIBLE);
@@ -61,19 +70,24 @@ public class AuthFragment extends Fragment {
                     });
         });
 
+        //переход к диалогу регистрации
         v.findViewById(R.id.btnRegister)
                 .setOnClickListener(view -> showRegisterDialog());
 
+        //переход к диалогу сброса пароля
         v.findViewById(R.id.btnResetPassword)
                 .setOnClickListener(view -> showResetPasswordDialog());
 
         return v;
     }
 
+    //отображение диалога регистрации пользователя
     private void showRegisterDialog() {
+        //загрузка интерфейса диалога
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_register, null);
 
+        //поля ввода
         TextInputEditText etName = dialogView.findViewById(R.id.etName);
         TextInputEditText etEmail = dialogView.findViewById(R.id.etPasswordReset);
         TextInputEditText etPassword = dialogView.findViewById(R.id.etPassword);
@@ -84,11 +98,13 @@ public class AuthFragment extends Fragment {
                 .setView(dialogView)
                 .setPositiveButton("Зарегистрироваться", (d, w) -> {
 
+                    //считывание введелнных данных
                     String name = etName.getText().toString().trim();
                     String email = etEmail.getText().toString().trim();
                     String password = etPassword.getText().toString();
                     String confirm = etConfirm.getText().toString();
 
+                    //проверка заполненности
                     if (name.isEmpty() || email.isEmpty()
                             || password.isEmpty() || confirm.isEmpty()) {
                         Toast.makeText(requireContext(),
@@ -96,12 +112,14 @@ public class AuthFragment extends Fragment {
                         return;
                     }
 
+                    //проверка совпадения паролец
                     if (!password.equals(confirm)) {
                         Toast.makeText(requireContext(),
                                 "Пароли не совпадают", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
+                    //регистрация через  ViewModel
                     viewModel.register(name, email, password)
                             .observe(getViewLifecycleOwner(), result -> {
                                 if (result == null) return;
@@ -119,6 +137,7 @@ public class AuthFragment extends Fragment {
                 .show();
     }
 
+    //диалог сброса пароля
     private void showResetPasswordDialog() {
         View dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_file_reset, null);

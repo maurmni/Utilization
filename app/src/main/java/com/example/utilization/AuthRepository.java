@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+//репозиторий авторизации (объединяет доступ к UserDAO & sharedPreferences)
 public class AuthRepository {
 
     private final UserDAO userDao;

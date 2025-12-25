@@ -18,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+//главная Activity приложения
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
 
+        //для управления навигацией
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.nav_host_fragment);
-
         NavController navController = navHostFragment.getNavController();
+
+        //скрытие нинего меню на экране авторизации
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.authFragment) {
                 bottomNav.setVisibility(View.GONE);
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
         NavigationUI.setupWithNavController(bottomNav, navController);
 
+        //проверка авторизации пользователя
         SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
         boolean isLoggedIn = prefs.getInt("USER_ID", -1) != -1;
 

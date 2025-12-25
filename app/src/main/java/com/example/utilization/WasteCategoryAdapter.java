@@ -11,15 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+//адаптер для отображения категорий отходов
 public class WasteCategoryAdapter extends RecyclerView.Adapter<WasteCategoryAdapter.ViewHolder> {
 
+    //список категорий
     private List<WasteCategory> list = new ArrayList<>();
 
+    //обновление данных адаптера
     public void setItems(List<WasteCategory> items) {
         this.list = items;
         notifyDataSetChanged();
     }
 
+    //создание ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -28,6 +32,7 @@ public class WasteCategoryAdapter extends RecyclerView.Adapter<WasteCategoryAdap
         return new ViewHolder(v);
     }
 
+    //привязка данныъ к элементу списка
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WasteCategory item = list.get(position);
@@ -35,11 +40,13 @@ public class WasteCategoryAdapter extends RecyclerView.Adapter<WasteCategoryAdap
         holder.desc.setText(item.description);
     }
 
+    //количество элементов списка
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    //ViewGolder для категории отходов
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, desc;
 

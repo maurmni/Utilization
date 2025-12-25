@@ -57,5 +57,15 @@ dependencies {
     testImplementation (libs.androidx.core.testing)
     testImplementation (libs.androidx.room.testing)
     testImplementation (libs.robolectric)
+
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    testImplementation ("androidx.room:room-testing:2.6.1")
+    testImplementation ("org.robolectric:robolectric:4.11.1")
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("androidx.test:core:1.5.0")
+    testImplementation ("org.robolectric:robolectric:4.11.1")
+    testImplementation ("androidx.room:room-testing:2.6.1")
+
+
 }
 
